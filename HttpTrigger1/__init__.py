@@ -1,24 +1,16 @@
 import logging
 
 import azure.functions as func
-
+import requests
+import json
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    name = req.params.get('name')
-    if not name:
-        try:
-            req_body = req.get_json()
-        except ValueError:
-            pass
-        else:
-            name = req_body.get('name')
-
-    if name:
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
-    else:
-        return func.HttpResponse(
-             "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
-             status_code=200
-        )
+    response = requests.get(url="https://api.open-meteo.com/v1/forecast?latitude=48.8534&longitude=2.3488&hourly=temperature_2m")
+    try:
+        data = json.loads(response.text)
+        res = {"temperature": data.get("current_weather").get("temperature")}
+    except:
+        res = {"temperature": 1000}
+    return res
