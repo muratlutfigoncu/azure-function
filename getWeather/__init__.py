@@ -5,7 +5,7 @@ import requests
 import json
 
 def make_http_request():
-    url =  "https://api.open-meteo.com/v1/forecast?latitude=48.8534&longitude=2.3488&hourly=temperature_2m"
+    url =  "https://api.open-meteo.com/v1/forecast?latitude=48.8534&longitude=2.3488&hourly=temperature_2m&current_weather=true"
 
     try:
         response = requests.get(url, headers={})
@@ -18,7 +18,6 @@ def make_http_request():
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
-    weather_url = "https://api.open-meteo.com/v1/forecast?latitude=48.8534&longitude=2.3488&hourly=temperature_2m"
     response = make_http_request()
 
     headers = {
